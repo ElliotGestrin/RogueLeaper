@@ -40,15 +40,19 @@ window.playClicked = function (){
   let wait = 0;
   for(let slotID in playZone.slots){
     let cardToPlay = playZone.slots[slotID].card;
-    if(cardToPlay) setTimeout(cardToPlay.play.bind(cardToPlay),wait);
-    wait += 1000;
+    if(cardToPlay){
+      setTimeout(cardToPlay.play.bind(cardToPlay),wait);
+      wait += 1000;
+    }
   }
 }
 
 setup();
 
 for(let i = 0; i < 10; i++){
-  deck.add(new Card(randomCardTop(), randomCardBottom(), "D" + i));
+  let card = new Card(randomCardTop(), randomCardBottom(), "D" + i);
+  card.owner = player;
+  deck.add(card);
 }
 deck.shuffle();
 for(let i = 0; i < initialCardsInHand; i++){

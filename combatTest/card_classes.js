@@ -3,19 +3,9 @@
 // Window level to be found by onCliks
 window.cards = {};
 
-// CardTop contain the top half of the effect and half the title of the card
+// CardHalf contain the top half of the effect and half the title of the card
 // They happen before the CardBottomtom. No image of their own
-class CardTop{
-  constructor(titleHalf, effectText, effect){
-    this.titleHalf = titleHalf;
-    this.effectText = effectText;
-    this.effect = effect; // The function to call to activate the effect
-  }
-}
-
-// CardBottom contain the bottom half of the effect and half the title of the card
-// They happen after the CardTop. No image of their own. Sometimes optional
-class CardBottom{
+class CardHalf{
   constructor(titleHalf, effectText, effect){
     this.titleHalf = titleHalf;
     this.effectText = effectText;
@@ -48,6 +38,7 @@ class Card{
     this.image = cardImage;
     this.identifier = identifier;
     this.slot = null;
+    this.owner = null;
 
     //Add it to the list of all cards
     cards[identifier] = this;
@@ -63,8 +54,8 @@ class Card{
 
   // Activate the effect of playing the card. First the top then the bottom
   play(){
-    this.cardTop.effect();
-    setTimeout(this.cardBottom.effect,300);
+    this.cardTop.effect(this);
+    setTimeout(this.cardBottom.effect.bind(null,this),300);
   }
 
   // Toggle active status when pressed. Only one card active at a time.
@@ -127,7 +118,6 @@ class CardSlot{
   switchCard(switchSlot){
     let currentCard = this.removeCard();
     let switchCard = switchSlot.removeCard();
-    console.log("Current: " + currentCard + "\nSwitch: " + switchCard)
     this.placeCard(switchCard);
     switchSlot.placeCard(currentCard);
   }
@@ -331,4 +321,4 @@ function getActiveCard(){
   return activeImage ? cards[activeImage.getAttribute('identifier')] : null;
 }
 
-export {CardTop, CardBottom, Card, PlayZone, Hand, Deck, Discard};
+export {CardHalf, Card, PlayZone, Hand, Deck, Discard};
