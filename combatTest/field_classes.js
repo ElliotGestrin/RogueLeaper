@@ -19,12 +19,12 @@ class Tile{
   attacked(damage,type,statuses){
     this.image.style.animation = "";
     setTimeout(Tile.animateTileAttack.bind(this),10);
-    if (damage > 0) this.creature.takeDamage(damage,type);
-    if (statuses) this.creature.applyStatus(statuses);
+    if (this.creature && damage > 0) this.creature.takeDamage(damage,type);
+    if (this.creature && statuses) this.creature.applyStatus(statuses);
   }
 
   static animateTileAttack(){
-    this.image.style.animation = "tileAttacked 500ms 2 alternate";
+    this.image.style.animation = "tileAttacked 400ms 2 alternate";
   }
 }
 

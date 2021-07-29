@@ -28,6 +28,7 @@ class Creature{
 
   // Moves the creature "steps" steps forward, checking before each to
   // See if it's possible. Uses teleportTo for final move
+  // If steps is negative it backs off
   move(steps){
     let newX = this.x;
     let newY = this.y;
@@ -35,6 +36,12 @@ class Creature{
                 (this.direction == 270) ?  -1 : 0;
     let yStep = (this.direction == 0)   ?  -1 :
                 (this.direction == 180) ?   1 : 0;
+
+    if (steps < 0){
+      xStep *= -1;
+      yStep *= -1;
+      steps *= -1;
+    }
 
     for(let step = 0; step < steps; step++){
       if (field.getTile(newX + xStep, newY + yStep)){

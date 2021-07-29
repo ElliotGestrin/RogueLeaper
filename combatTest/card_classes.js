@@ -64,7 +64,7 @@ class Card{
   // Activate the effect of playing the card. First the top then the bottom
   play(){
     this.cardTop.effect();
-    this.cardBottom.effect();
+    setTimeout(this.cardBottom.effect,300);
   }
 
   // Toggle active status when pressed. Only one card active at a time.
