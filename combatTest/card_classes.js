@@ -1,6 +1,7 @@
 // Cards is a "dictionary" between every card's identifier and the card
 // itself. Let's cards be easily found between holders.
-let cards = {};
+// Window level to be found by onCliks
+window.cards = {};
 
 // CardTop contain the top half of the effect and half the title of the card
 // They happen before the CardBottomtom. No image of their own
@@ -330,4 +331,4 @@ function getActiveCard(){
   return activeImage ? cards[activeImage.getAttribute('identifier')] : null;
 }
 
-export {PlayZone, Hand, Deck, Discard};
+export {CardTop, CardBottom, Card, PlayZone, Hand, Deck, Discard};

@@ -42,9 +42,10 @@ class Field{
     image.style.gridTemplateColumns = "auto ".repeat(width);
   }
 
-  // Returns the tile at x,y
+  // Returns the tile at x,y, or null
   getTile(x,y){
-    return this.tiles[x + "," + y];
+    let tile = this.tiles[x + "," + y];
+    return tile ? tile : null;
   }
 }
 

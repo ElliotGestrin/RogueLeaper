@@ -37,8 +37,7 @@ class Creature{
                 (this.direction == 180) ?   1 : 0;
 
     for(let step = 0; step < steps; step++){
-      let newPos = (newX + xStep) + ',' + (newY + yStep);
-      if (field.getTile(this.x, this.y)){
+      if (field.getTile(newX + xStep, newY + yStep)){
         // Check if the new position even exists
         newX += xStep;
         newY += yStep;
@@ -50,6 +49,7 @@ class Creature{
 
   // Teleports the creature to x,y. Used for initial placement & move
   teleportTo(x,y){
+    console.log("Teleporting to: " + x + ", " + y)
     // Remove from current tile
     let currentTile = field.getTile(this.x, this.y);
     if (currentTile) currentTile.creature = null;
