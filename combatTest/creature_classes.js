@@ -104,3 +104,5 @@ class Player extends Creature{
     this.image.setAttribute('class',this.image.getAttribute('class') + ' player')
   }
 }
+
+export{Player};

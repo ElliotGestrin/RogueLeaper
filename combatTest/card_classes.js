@@ -329,3 +329,5 @@ function getActiveCard(){
   let activeImage = document.querySelector('.active-card');
   return activeImage ? cards[activeImage.getAttribute('identifier')] : null;
 }
+
+export {PlayZone, Hand, Deck, Discard};

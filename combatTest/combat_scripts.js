@@ -4,12 +4,17 @@ let numCardsPerTurn = 2;
 let maxCardsInHand = 10;
 let initialCardsInHand = 5;
 
-let player = new Player("images/player.png");
-let hand = new Hand(maxCardsInHand);
-let playZone = new PlayZone(numCardsPerTurn);
-let deck = new Deck();
-let discard = new Discard();
-let field = new Field(numTilesWidth,numTilesHeight);
+import {Hand, PlayZone, Deck, Discard} from "./card_classes.js";
+import {Player} from "./creature_classes.js";
+import {Field} from "./field_classes.js";
+
+// Used as "window.var" to become global variables for all modules
+let window.player = new Player("images/player.png");
+let window.hand = new Hand(maxCardsInHand);
+let window.playZone = new PlayZone(numCardsPerTurn);
+let window.deck = new Deck();
+let window.discard = new Discard();
+let window.field = new Field(numTilesWidth,numTilesHeight);
 // Holders is a "dictionary" of every item containing card-zones
 // This is used to convert from the card-zones image attribute "holder",
 // Which is string only, to the correct holder object

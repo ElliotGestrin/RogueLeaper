@@ -47,3 +47,5 @@ class Field{
     return this.tiles[x + "," + y];
   }
 }
+
+export {Field};
