@@ -5,17 +5,22 @@
     <link href='combat_styles.css' rel = 'stylesheet'>
   </head>
   <body>
-    <div class='field'></div>
-    <div class='card-zone'>
-      <div class='deck' onClick='deck.pressed(event)'>
-        <img src='images/deck.png' class='filler-image'>
+    <div class='combat'>
+      <div class='field'></div>
+      <div class='card-zone'>
+        <div class='deck' onClick='deck.pressed(event)'>
+          <img src='images/deck.png' class='filler-image'>
+        </div>
+        <div class='play-zone'></div>
+        <div class='hand' onClick='hand.pressed(event)'></div>
+        <div class='discard' onClick='discard.pressed(event)'>
+          <img src='images/discard.png' class='filler-image'>
+        </div>
+        <button class='play-button' onClick='playButton.pressed()'>Play!</button>
       </div>
-      <div class='play-zone'></div>
-      <div class='hand' onClick='hand.pressed(event)'></div>
-      <div class='discard' onClick='discard.pressed(event)'>
-        <img src='images/discard.png' class='filler-image'>
-      </div>
-      <button class='play-button' onClick='playClicked()'>Play!</button>
+    </div>
+    <button class='options-button' onClick='optionsButton.pressed()'>Options</button>
+    <div class='options-meny'>
     </div>
     <script type="module" src="combat_scripts.js"></script>
   </body>

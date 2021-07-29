@@ -121,6 +121,7 @@ body{
 .card > h3{
   margin-bottom: 6px;
 }
+
 .card:hover{
   background-color: #e8c9b2;
   border-color: #f0c09b;
@@ -138,4 +139,25 @@ body{
   background-color: lime;
   grid-row: 1;
   grid-column: 7;
+}
+
+.options-button{
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background-color: grey;
+  color: white;
+  z-index: 6;
+}
+
+/*Options meny*/
+.options-meny{
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  background-color: lightGrey;
 }

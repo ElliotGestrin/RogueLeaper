@@ -9,6 +9,7 @@ import {Player} from "./creature_classes.js";
 import {Field} from "./field_classes.js";
 import {cardTops, randomCardTop} from "./cardTops.js";
 import {cardBottoms, randomCardBottom} from "./cardBottoms.js";
+import {PlayButton,OptionsButton} from "./ui_classes.js"
 
 // Used as "window.var" to become global variables for all modules
 window.player = new Player("images/player.png");
@@ -17,6 +18,8 @@ window.playZone = new PlayZone(numCardsPerTurn);
 window.deck = new Deck();
 window.discard = new Discard();
 window.field = new Field(numTilesWidth,numTilesHeight);
+window.playButton = new PlayButton();
+window.optionsButton = new OptionsButton();
 // This is used to convert from the card-zones image attribute "holder",
 // Holders is a "dictionary" of every item containing card-zones
 // Which is string only, to the correct holder object
@@ -34,17 +37,6 @@ function setup() {
   //Set up the player
   player.point(90);
   player.teleportTo(1,4);
-}
-
-window.playClicked = function (){
-  let wait = 0;
-  for(let slotID in playZone.slots){
-    let cardToPlay = playZone.slots[slotID].card;
-    if(cardToPlay){
-      setTimeout(cardToPlay.play.bind(cardToPlay),wait);
-      wait += 1000;
-    }
-  }
 }
 
 setup();
