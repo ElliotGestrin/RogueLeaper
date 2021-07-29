@@ -1,0 +1,10 @@
+{
+	"name" : "Troll",
+	"health" : 60,
+	"armor" : 0,
+	"vulnerabilities" : {"fire" : 2},
+	"resistances" : {},
+	"statusImmune" : {},
+	"statuses" : {"regeneration" : {"duration" : 99, "strength" : 5}},
+	"deckName" : "troll"
+}

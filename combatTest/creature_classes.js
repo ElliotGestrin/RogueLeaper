@@ -1,7 +1,8 @@
+import * as enemyDecks from "./enemies/decks.js"
 // The base class for every creature. Can move and attack
 class Creature{
-  constructor(imgPath, health){
-    this.health = health;
+  constructor(imgPath){
+    this.health = null;
     this.vulnerabilities = {};
     this.resistances = {};
     this.statusImmune = [];
@@ -43,20 +44,22 @@ class Creature{
       steps *= -1;
     }
 
+    let delay = 0;
+
     for(let step = 0; step < steps; step++){
-      if (field.getTile(newX + xStep, newY + yStep)){
+      let nextTile = field.getTile(newX + xStep, newY + yStep);
+      if (nextTile && nextTile.walkable()){
         // Check if the new position even exists
         newX += xStep;
         newY += yStep;
+        setTimeout(this.teleportTo.bind(this,newX,newY),delay);
+        delay += 100;
       }
     }
-
-    this.teleportTo(newX,newY);
   }
 
   // Teleports the creature to x,y. Used for initial placement & move
   teleportTo(x,y){
-    console.log("Teleporting to: " + x + ", " + y)
     // Remove from current tile
     let currentTile = field.getTile(this.x, this.y);
     if (currentTile) currentTile.creature = null;
@@ -88,7 +91,7 @@ class Creature{
                 break;
     }
     let attackedTile = field.getTile(attackX, attackY);
-    attackedTile.attacked(damage,type,statuses);
+    if(attackedTile) attackedTile.attacked(damage,type,statuses);
   }
 
   // Take damage, possibly after applying resistances or vulnerabilities
@@ -107,9 +110,32 @@ class Creature{
 
 class Player extends Creature{
   constructor(imgPath, health = 100){
-    super(imgPath, health);
+    super(imgPath);
+    this.health = health;
     this.image.setAttribute('class',this.image.getAttribute('class') + ' player')
   }
 }
 
-export{Player};
+class Enemy extends Creature{
+  constructor(name){
+    let jsonPath = "./enemies/" + name + ".json";
+    let imagePath = "./enemies/images/" + name + ".png";
+    super(imagePath)
+    let request = new XMLHttpRequest;
+    request.open("GET",jsonPath);
+    request.responseType = "json";
+    request.send();
+    request.onload = function(){
+      let info = request.response;
+      for (let stat in info){
+        this[stat] = info[stat];
+      }
+      this.deck = enemyDecks[this.deckName];
+      console.log(this);
+    }.bind(this)
+  }
+}
+
+export{Player, Enemy};
+
+window.troll = new Enemy("troll")

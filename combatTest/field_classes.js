@@ -23,6 +23,11 @@ class Tile{
     if (this.creature && statuses) this.creature.applyStatus(statuses);
   }
 
+  walkable(){
+    if (this.creature || this.statuses["blocked"]) return false;
+    return true;
+  }
+
   static animateTileAttack(){
     this.image.style.animation = "tileAttacked 400ms 2 alternate";
   }
@@ -49,4 +54,4 @@ class Field{
   }
 }
 
-export {Field};
+export {Field, Tile};
