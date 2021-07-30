@@ -58,6 +58,12 @@ class Card{
     setTimeout(this.cardBottom.effect.bind(null,this),300);
   }
 
+  // Same as play, but without pausing
+  simualte(){
+    this.cardTop.effect(this);
+    this.cardBottom.effect.(this);
+  }
+  
   // Toggle active status when pressed. Only one card active at a time.
   pressed(event){
     let activeCard = getActiveCard();

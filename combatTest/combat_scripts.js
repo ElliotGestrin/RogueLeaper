@@ -9,7 +9,8 @@ import {Player} from "./creature_classes.js";
 import {Field} from "./field_classes.js";
 import {cardTops, randomCardTop} from "./cardTops.js";
 import {cardBottoms, randomCardBottom} from "./cardBottoms.js";
-import {PlayButton,OptionsButton} from "./ui_classes.js"
+import {PlayButton,OptionsButton} from "./ui_classes.js";
+import {CombatController} from "./combatController_class.js";
 
 // Used as "window.var" to become global variables for all modules
 window.player = new Player("images/player.png");
@@ -20,6 +21,7 @@ window.discard = new Discard();
 window.field = new Field(numTilesWidth,numTilesHeight);
 window.playButton = new PlayButton();
 window.optionsButton = new OptionsButton();
+window.combatController = new CombatController();
 // This is used to convert from the card-zones image attribute "holder",
 // Holders is a "dictionary" of every item containing card-zones
 // Which is string only, to the correct holder object
