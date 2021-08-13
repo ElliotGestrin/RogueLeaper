@@ -1,5 +1,6 @@
 class CombatController{
   constructor(){
+    this.simulating = false;
   }
 
   endTurn(){
@@ -8,7 +9,7 @@ class CombatController{
       let cardToPlay = playZone.slots[slotID].card;
       if(cardToPlay){
         setTimeout(cardToPlay.play.bind(cardToPlay),wait);
-        wait += 1000;
+        if (!this.simulating) wait += 1000;
     }}
   }
 }

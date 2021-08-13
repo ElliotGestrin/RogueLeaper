@@ -29,7 +29,9 @@ class Tile{
   }
 
   static animateTileAttack(){
-    this.image.style.animation = "tileAttacked 400ms 2 alternate";
+    if (!combatController.simulating){
+      this.image.style.animation = "tileAttacked 400ms 2 alternate";
+    }
   }
 }
 

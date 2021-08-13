@@ -55,13 +55,8 @@ class Card{
   // Activate the effect of playing the card. First the top then the bottom
   play(){
     this.cardTop.effect(this);
-    setTimeout(this.cardBottom.effect.bind(null,this),300);
-  }
-
-  // Same as play, but without pausing
-  simualte(){
-    this.cardTop.effect(this);
-    this.cardBottom.effect(this);
+    if(combatController.simulating) this.cardBottom.effect(this);
+    else setTimeout(this.cardBottom.effect.bind(null,this),300);
   }
 
   // Toggle active status when pressed. Only one card active at a time.

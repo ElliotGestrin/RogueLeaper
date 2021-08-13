@@ -55,8 +55,12 @@ class Creature{
         // Check if the new position even exists
         newX += xStep;
         newY += yStep;
-        setTimeout(this.teleportTo.bind(this,newX,newY),delay);
-        delay += 100;
+        if(!combatController.simulating){
+          // If not simulating, have 100ms between each step
+          setTimeout(this.teleportTo.bind(this,newX,newY),delay);
+          delay += 100;
+        }
+        else  this.teleportTo(newX,newY)
       }
     }
   }
@@ -142,8 +146,6 @@ class Enemy extends Creature{
   setupDeck(){
     for (let cardName in this.deck){
       let cardJSON = this.deck[cardName];
-      console.log(cardName + ": ")
-      console.log(cardJSON)
       let cardTop = new CardHalf(cardJSON.topTitle,cardJSON.topText,
                                  new Function("card", cardJSON.topEffect));
       let cardBottom = new CardHalf(cardJSON.bottomTitle,cardJSON.bottomText,
@@ -156,5 +158,3 @@ class Enemy extends Creature{
 }
 
 export{Player, Enemy};
-
-window.troll = new Enemy("troll")

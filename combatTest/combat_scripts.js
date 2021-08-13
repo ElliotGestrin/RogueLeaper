@@ -5,7 +5,7 @@ let maxCardsInHand = 10;
 let initialCardsInHand = 5;
 
 import {Hand, PlayZone, Deck, Discard, Card} from "./card_classes.js";
-import {Player} from "./creature_classes.js";
+import {Player, Enemy} from "./creature_classes.js";
 import {Field} from "./field_classes.js";
 import {cardTops, randomCardTop} from "./cardTops.js";
 import {cardBottoms, randomCardBottom} from "./cardBottoms.js";
@@ -52,3 +52,6 @@ deck.shuffle();
 for(let i = 0; i < initialCardsInHand; i++){
   hand.addCard(deck.draw());
 }
+
+
+window.troll = new Enemy("troll")
