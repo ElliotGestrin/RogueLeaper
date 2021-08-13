@@ -24,7 +24,7 @@ cardTops["Back"] = new CardHalf("Back ", "Turn around",
 
 // Left - Turn left
 cardTops["Left"] = new CardHalf("Left ", "Turn left",
-  (card)=>card.owner.turn(270));
+  (card)=>card.owner.turn(-90));
 
 // Stabby - Attack ahead weakly
 cardTops["Stabby"] = new CardHalf("Stabby ", "Attack ahead for 10 damage",

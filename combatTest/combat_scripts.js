@@ -55,3 +55,4 @@ for(let i = 0; i < initialCardsInHand; i++){
 
 
 window.troll = new Enemy("troll")
+troll.teleportTo(3,4);

@@ -1,6 +1,8 @@
 {
 	"name" : "Troll",
 	"imageName" : "troll.png",
+	"handSize" : 4,
+	"cardsPerTurn" : 2,
 	"health" : 60,
 	"armor" : 0,
 	"vulnerabilities" : {"fire" : 2},
@@ -12,6 +14,34 @@
 													 "topText" : "Attack for 20",
 													 "bottomText" : "",
 													 "topEffect" : "card.owner.attack(1,0,20)",
-													 "bottomEffect" : ""}
+													 "bottomEffect" : ""},
+
+						"heavingStep" : {"topTitle" : "Heaving",
+	 												 "bottomTitle" : " Step",
+	 												 "topText" : "Attack for 10",
+	 												 "bottomText" : "Then move 1",
+	 												 "topEffect" : "card.owner.attack(1,0,10)",
+	 												 "bottomEffect" : "card.owner.move(1)"},
+
+						 "heavingRight" : {"topTitle" : "Heaving",
+ 	 												 "bottomTitle" : " Right",
+ 	 												 "topText" : "Attack right for 10",
+ 	 												 "bottomText" : "Then turn right",
+ 	 												 "topEffect" : "card.owner.attack(0,1,10)",
+ 	 												 "bottomEffect" : "card.owner.turn(90)"},
+
+						 "heavingLeft" : {"topTitle" : "Heaving",
+						 							"bottomTitle" : " Left",
+						 							"topText" : "Attack left for 10",
+						 							"bottomText" : "Then turn left",
+						 							"topEffect" : "card.owner.attack(0,-1,10)",
+						 							"bottomEffect" : "card.owner.turn(-90)"},
+
+						"sweep" : {"topTitle" : "Sweep",
+						 							"bottomTitle" : "",
+						 							"topText" : "Attack front-left, front and front-right for 20",
+						 							"bottomText" : "",
+						 							"topEffect" : "card.owner.attack(1,-1,20);card.owner.attack(1,0,20);card.owner.attack(1,1,20);",
+						 							"bottomEffect" : ""}
 					 }
 }

@@ -27,6 +27,7 @@ class Creature{
 
   // Turns the creature clockwise "deg" degrees
   turn(deg){
+    if (deg < 0) deg = 360 + deg;
     this.point(this.direction + deg);
   }
 
