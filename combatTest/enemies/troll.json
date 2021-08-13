@@ -1,10 +1,17 @@
 {
 	"name" : "Troll",
+	"imageName" : "troll.png",
 	"health" : 60,
 	"armor" : 0,
 	"vulnerabilities" : {"fire" : 2},
 	"resistances" : {},
 	"statusImmune" : {},
 	"statuses" : {"regeneration" : {"duration" : 99, "strength" : 5}},
-	"deckName" : "troll"
+	"deck" : {"trollBash" : {"topTitle" : "Bash",
+													 "bottomTitle" : "",
+													 "topText" : "Attack for 20",
+													 "bottomText" : "",
+													 "topEffect" : "card.owner.attack(1,0,20)",
+													 "bottomEffect" : ""}
+					 }
 }

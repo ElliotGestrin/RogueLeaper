@@ -1,7 +1,7 @@
-import * as enemyDecks from "./enemies/decks.js"
+import {Card, CardHalf} from "./card_classes.js";
 // The base class for every creature. Can move and attack
 class Creature{
-  constructor(imgPath){
+  constructor(){
     this.health = null;
     this.vulnerabilities = {};
     this.resistances = {};
@@ -10,6 +10,9 @@ class Creature{
     this.x = null; //x,y coordinates
     this.y = null;
     this.direction = 0; //Value between 0 and 360, rotation from up clockwise
+  }
+
+  setImage(imgPath){
     let creatureImage = document.createElement('img');
     creatureImage.setAttribute('class','creature');
     creatureImage.setAttribute('src',imgPath);
@@ -110,17 +113,17 @@ class Creature{
 
 class Player extends Creature{
   constructor(imgPath, health = 100){
-    super(imgPath);
+    super();
     this.health = health;
-    this.image.setAttribute('class',this.image.getAttribute('class') + ' player')
+    this.setImage(imgPath);
+    this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
   }
 }
 
 class Enemy extends Creature{
   constructor(name){
     let jsonPath = "./enemies/" + name + ".json";
-    let imagePath = "./enemies/images/" + name + ".png";
-    super(imagePath)
+    super()
     let request = new XMLHttpRequest;
     request.open("GET",jsonPath);
     request.responseType = "json";
@@ -130,9 +133,25 @@ class Enemy extends Creature{
       for (let stat in info){
         this[stat] = info[stat];
       }
-      this.deck = enemyDecks[this.deckName];
+      this.setupDeck();
+      this.setImage("./enemies/images/" + this.imageName);
       console.log(this);
     }.bind(this)
+  }
+
+  setupDeck(){
+    for (let cardName in this.deck){
+      let cardJSON = this.deck[cardName];
+      console.log(cardName + ": ")
+      console.log(cardJSON)
+      let cardTop = new CardHalf(cardJSON.topTitle,cardJSON.topText,
+                                 new Function("card", cardJSON.topEffect));
+      let cardBottom = new CardHalf(cardJSON.bottomTitle,cardJSON.bottomText,
+                                 new Function("card", cardJSON.bottomEffect));
+      let card = new Card(cardTop,cardBottom,cardName);
+      card.owner = this;
+      this.deck[cardName] = card;
+    }
   }
 }
 
