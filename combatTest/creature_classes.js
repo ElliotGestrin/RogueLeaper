@@ -26,7 +26,7 @@ class Creature{
   // Points the creature to deg degrees. Assumes pointing up first
   point(deg){
     this.direction = deg % 360;
-    this.image.style.transform ='rotate(' + deg % 360 + 'deg)';
+    if(this.image) this.image.style.transform ='rotate(' + deg % 360 + 'deg)';
   }
 
   // Turns the creature clockwise "deg" degrees
@@ -102,7 +102,7 @@ class Creature{
                 attackY -= rightSteps;
                 break;
     }
-    let attackedTile = field.getTile(attackX, attackY);
+    let attackedTile = this.field.getTile(attackX, attackY);
     if(attackedTile) attackedTile.attacked(damage,type,statuses);
   }
 
@@ -116,6 +116,27 @@ class Creature{
   applyStatus(statuses){
     for(status in statuses){
       if(!(status in this.statusImmune)) this.statuses[status] = statuses[status];
+    }
+  }
+
+  // Returns the manhattan distance to another creature
+  distanceTo(creature){
+    return Math.abs(this.x - creature.x) + Math.abs(this.y - creature.y);
+  }
+
+  // Returns 2 if poining the closest direction, 1 if pointing second closest
+  // -1 if pointing third closest, -2 if pointing furthest away, 0 if orthogonal
+  pointingTowards(creature){
+    let dX = creature.x - this.x;
+    let dY = creature.y - this.y;
+    // The "strongest" delta gets strength 2, the weakest one
+    let dXPower = (Math.abs(dX) >= Math.abs(dY)) ? 2 : 1;
+    let dYPower = (Math.abs(dY) >= Math.abs(dX)) ? 2 : 1;
+    switch (this.direction) {
+      case 0:   return -dYPower * Math.sign(dY);
+      case 90:  return dXPower * Math.sign(dX);
+      case 180: return dYPower * Math.sign(dY);
+      case 270: return -dXPower * Math.sign(dX);
     }
   }
 

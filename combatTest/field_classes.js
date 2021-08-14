@@ -15,14 +15,16 @@ class Tile{
     this.y = y;
     this.identifier = x + ',' + y;
     this.statuses = {};
+    this.attackedFor = 0;
     this.creature = null;
   }
 
   attacked(damage,type,statuses){
-    this.image.style.animation = "";
+    if(!combatController.simulating) this.image.style.animation = "";
     if(!combatController.simulating) setTimeout(Tile.animateTileAttack.bind(this),10);
     if (this.creature && damage > 0) this.creature.takeDamage(damage,type);
     if (this.creature && statuses) this.creature.applyStatus(statuses);
+    this.attackedFor += damage;
   }
 
   walkable(){
@@ -74,6 +76,12 @@ class Field{
          copy.tiles[x + "," + y] = this.tiles[x + "," + y].copy();
     }}
     return copy;
+  }
+
+  clearAttacked(){
+    for (let tileID in this.tiles){
+      this.tiles[tileID].wasAttacked = 0;
+    }
   }
 }
 
