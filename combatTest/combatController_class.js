@@ -17,6 +17,7 @@ class CombatController{
       }
     }
 
+    this.simulating = false;
     for(let slotID in playZone.slots){
       let cardToPlay = playZone.slots[slotID].card;
       if(cardToPlay){
@@ -29,6 +30,7 @@ class CombatController{
 
   }
 
+  // Create copies of field, player and enemies. For simulating
   copyEverything(){
     let fieldCopy = field.copy();
     let playerCopy = player.copy();
@@ -38,7 +40,7 @@ class CombatController{
     for (let enemy of enemies){
       let enemyCopy = enemy.copy();
       enemyCopy.field = fieldCopy;
-      enemyCopy.teleportTo(enemyCopy.x, enemyCopy.y);
+      if (enemyCopy.x) enemyCopy.teleportTo(enemyCopy.x, enemyCopy.y);
       enemiesCopy.push(enemyCopy);
     }
     return {fieldCopy,playerCopy,enemiesCopy}

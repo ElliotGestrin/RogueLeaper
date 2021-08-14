@@ -1,16 +1,18 @@
 import {Card, CardHalf} from "./card_classes.js";
 // The base class for every creature. Can move and attack
 class Creature{
-  constructor(){
-    this.health = null;
-    this.vulnerabilities = {};
-    this.resistances = {};
-    this.statusImmune = [];
-    this.statuses = {};
-    this.x = null; //x,y coordinates
-    this.y = null;
-    this.direction = 0; //Value between 0 and 360, rotation from up clockwise
-    this.field = field; // The field the creature is attached to, used for simulating
+  constructor(copy = false){
+    if(!copy){
+      this.health = null;
+      this.vulnerabilities = {};
+      this.resistances = {};
+      this.statusImmune = [];
+      this.statuses = {};
+      this.x = null; //x,y coordinates
+      this.y = null;
+      this.direction = 0; //Value between 0 and 360, rotation from up clockwise
+      this.field = field; // The field the creature is attached to, used for simulating
+    }
   }
 
   setImage(imgPath){
@@ -120,14 +122,17 @@ class Creature{
   // Copies all the elements except hand,deck and image onto a returned copy
   copy(copy){
     for(let element in this){
-      // Don't try to copy hand or deck elements
+      // Don't try to copy hand, image or deck elements
       if (["hand","deck","image"].includes(element)) continue;
       let value = this[element]
       if (Array.isArray(value)){
         copy[element] = Array.from(value);
       }
       else if (typeof value == "object"){
-        if (value != null) Object.assign(copy[element], value);
+        if (value != null){
+          copy[element] = {}; // Copy's element must be object before assign
+          Object.assign(copy[element], value);
+        }
         else copy[element] = null;
       }
       else{
@@ -140,37 +145,41 @@ class Creature{
 }
 
 class Player extends Creature{
-  constructor(health = 100){
-    super();
-    this.health = health;
-    this.setImage("./images/player.png");
-    this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
+  constructor(copy = false){
+    super(copy);
+    if(!copy){
+      this.health = 100;
+      this.setImage("./images/player.png");
+      this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
+    }
   }
 
   copy(){
-    let copy = new Player(this.image);
+    let copy = new Player(true);
     return super.copy(copy);
   }
 }
 
 class Enemy extends Creature{
-  constructor(name){
-    super()
-    let jsonPath = "./enemies/" + name + ".json";
-    let request = new XMLHttpRequest;
-    request.open("GET",jsonPath);
-    request.responseType = "json";
-    request.send();
-    request.onload = function(){
-      let info = request.response;
-      for (let stat in info){
-        this[stat] = info[stat];
-      }
-      this.setupDeck();
-      this.setImage("./enemies/images/" + this.imageName);
-      this.hand = [];
-      this.plan = [];
-    }.bind(this)
+  constructor(name, copy = false){
+    super(copy)
+    if(!copy){
+      let jsonPath = "./enemies/" + name + ".json";
+      let request = new XMLHttpRequest;
+      request.open("GET",jsonPath);
+      request.responseType = "json";
+      request.send();
+      request.onload = function(){
+        let info = request.response;
+        for (let stat in info){
+          this[stat] = info[stat];
+        }
+        this.setupDeck();
+        this.setImage("./enemies/images/" + this.imageName);
+        this.hand = [];
+        this.plan = [];
+      }.bind(this)
+    }
   }
 
   // Adds actual Card elements into .deck for the cards saved in json
@@ -232,7 +241,7 @@ class Enemy extends Creature{
 
   // Returns a deep copy of the creature
   copy(){
-    let copy = new Enemy(this.name);
+    let copy = new Enemy(this.name, true);
     return super.copy(copy);
   }
 }

@@ -20,7 +20,7 @@ class Tile{
 
   attacked(damage,type,statuses){
     this.image.style.animation = "";
-    setTimeout(Tile.animateTileAttack.bind(this),10);
+    if(!combatController.simulating) setTimeout(Tile.animateTileAttack.bind(this),10);
     if (this.creature && damage > 0) this.creature.takeDamage(damage,type);
     if (this.creature && statuses) this.creature.applyStatus(statuses);
   }
@@ -38,9 +38,7 @@ class Tile{
   }
 
   static animateTileAttack(){
-    if (!combatController.simulating){
       this.image.style.animation = "tileAttacked 400ms 2 alternate";
-    }
   }
 }
 
