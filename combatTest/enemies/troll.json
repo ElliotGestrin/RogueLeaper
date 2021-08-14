@@ -1,8 +1,8 @@
 {
-	"name" : "Troll",
+	"name" : "troll",
 	"imageName" : "troll.png",
-	"handSize" : 4,
-	"cardsPerTurn" : 2,
+	"handSize" : 20,
+	"cardsPerTurn" : 3,
 	"health" : 60,
 	"armor" : 0,
 	"vulnerabilities" : {"fire" : 2},
@@ -37,7 +37,7 @@
 						 							"topEffect" : "card.owner.attack(0,-1,10)",
 						 							"bottomEffect" : "card.owner.turn(-90)"},
 
-						"sweep" : {"topTitle" : "Sweep",
+						 "sweep" : {"topTitle" : "Sweep",
 						 							"bottomTitle" : "",
 						 							"topText" : "Attack front-left, front and front-right for 20",
 						 							"bottomText" : "",

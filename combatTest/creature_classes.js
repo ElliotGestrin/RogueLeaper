@@ -10,6 +10,7 @@ class Creature{
     this.x = null; //x,y coordinates
     this.y = null;
     this.direction = 0; //Value between 0 and 360, rotation from up clockwise
+    this.field = field; // The field the creature is attached to, used for simulating
   }
 
   setImage(imgPath){
@@ -17,6 +18,7 @@ class Creature{
     creatureImage.setAttribute('class','creature');
     creatureImage.setAttribute('src',imgPath);
     this.image = creatureImage;
+    this.imagePath = imgPath;
   }
 
   // Points the creature to deg degrees. Assumes pointing up first
@@ -51,7 +53,7 @@ class Creature{
     let delay = 0;
 
     for(let step = 0; step < steps; step++){
-      let nextTile = field.getTile(newX + xStep, newY + yStep);
+      let nextTile = this.field.getTile(newX + xStep, newY + yStep);
       if (nextTile && nextTile.walkable()){
         // Check if the new position even exists
         newX += xStep;
@@ -69,14 +71,14 @@ class Creature{
   // Teleports the creature to x,y. Used for initial placement & move
   teleportTo(x,y){
     // Remove from current tile
-    let currentTile = field.getTile(this.x, this.y);
+    let currentTile = this.field.getTile(this.x, this.y);
     if (currentTile) currentTile.creature = null;
     // Update the stored position
     this.x = x;
     this.y = y;
     // Move the image
-    let landingTile = field.getTile(this.x, this.y);
-    landingTile.image.append(this.image);
+    let landingTile = this.field.getTile(this.x, this.y);
+    if(landingTile.image) landingTile.image.append(this.image);
     landingTile.creature = this;
   }
 
@@ -114,21 +116,47 @@ class Creature{
       if(!(status in this.statusImmune)) this.statuses[status] = statuses[status];
     }
   }
+
+  // Copies all the elements except hand,deck and image onto a returned copy
+  copy(copy){
+    for(let element in this){
+      // Don't try to copy hand or deck elements
+      if (["hand","deck","image"].includes(element)) continue;
+      let value = this[element]
+      if (Array.isArray(value)){
+        copy[element] = Array.from(value);
+      }
+      else if (typeof value == "object"){
+        if (value != null) Object.assign(copy[element], value);
+        else copy[element] = null;
+      }
+      else{
+        // Otherwise its a "simple" data-type
+        copy[element] = value;
+      }
+    }
+    return copy;
+  }
 }
 
 class Player extends Creature{
-  constructor(imgPath, health = 100){
+  constructor(health = 100){
     super();
     this.health = health;
-    this.setImage(imgPath);
+    this.setImage("./images/player.png");
     this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
+  }
+
+  copy(){
+    let copy = new Player(this.image);
+    return super.copy(copy);
   }
 }
 
 class Enemy extends Creature{
   constructor(name){
-    let jsonPath = "./enemies/" + name + ".json";
     super()
+    let jsonPath = "./enemies/" + name + ".json";
     let request = new XMLHttpRequest;
     request.open("GET",jsonPath);
     request.responseType = "json";
@@ -140,10 +168,12 @@ class Enemy extends Creature{
       }
       this.setupDeck();
       this.setImage("./enemies/images/" + this.imageName);
-      console.log(this);
+      this.hand = [];
+      this.plan = [];
     }.bind(this)
   }
 
+  // Adds actual Card elements into .deck for the cards saved in json
   setupDeck(){
     for (let cardName in this.deck){
       let cardJSON = this.deck[cardName];
@@ -155,6 +185,55 @@ class Enemy extends Creature{
       card.owner = this;
       this.deck[cardName] = card;
     }
+  }
+
+  // Adds handSize cards from deck into an array called ".hand"
+  draw(){
+    this.hand = [];
+    let cardNames = Object.keys(this.deck);
+    let numCardsInDeck = cardNames.length;
+    for (let i = 0; i < this.handSize ; i++){
+      // Pick a random card from the deck
+      let pick = cardNames[Math.floor(Math.random()*numCardsInDeck)];
+      this.hand[i] = this.deck[pick];
+    }
+  }
+
+  // Return an array of arrays, each subarray being a possible line of play
+  // Based on cards in hand
+  possiblePlays(){
+    return this.nextCards(this.hand, this.cardsPerTurn);
+  }
+
+  // Recursively generates every possible play. Creates an array of arrays
+  nextCards(remainingHand, toPick){
+    if (toPick <= 0 || !remainingHand) return [];
+    let possiblePlays = [];
+
+    for (let currentCard of remainingHand){
+      // Create a shallow copy of the current hand, then remove the card based on index
+      let handWithout = remainingHand.slice();
+      let cardIndex = handWithout.indexOf(currentCard);
+      handWithout.splice(cardIndex,1);
+
+      let nextCards = this.nextCards(handWithout,toPick - 1)
+      if (nextCards.length != 0){
+        // If there were cards to follow, add this to the start
+        for (let followUp of nextCards){
+          followUp.unshift(currentCard)
+          possiblePlays.push(followUp);
+      }}else{
+        // If there weren't, start a new sequence with this card
+        possiblePlays.push([currentCard]);
+      }
+    }
+    return possiblePlays;
+  }
+
+  // Returns a deep copy of the creature
+  copy(){
+    let copy = new Enemy(this.name);
+    return super.copy(copy);
   }
 }
 

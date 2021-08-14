@@ -13,12 +13,12 @@ import {PlayButton,OptionsButton} from "./ui_classes.js";
 import {CombatController} from "./combatController_class.js";
 
 // Used as "window.var" to become global variables for all modules
-window.player = new Player("images/player.png");
+window.field = new Field(numTilesWidth,numTilesHeight);
+window.player = new Player();
 window.hand = new Hand(maxCardsInHand);
 window.playZone = new PlayZone(numCardsPerTurn);
 window.deck = new Deck();
 window.discard = new Discard();
-window.field = new Field(numTilesWidth,numTilesHeight);
 window.playButton = new PlayButton();
 window.optionsButton = new OptionsButton();
 window.combatController = new CombatController();
@@ -53,6 +53,5 @@ for(let i = 0; i < initialCardsInHand; i++){
   hand.addCard(deck.draw());
 }
 
-
-window.troll = new Enemy("troll")
-troll.teleportTo(3,4);
+window.enemies = [];
+window.enemies.push(new Enemy("troll"))
