@@ -11,7 +11,8 @@ class CombatController{
     this.simulating = true;
     field.clearAttacked();
     for(let enemyID in enemies){
-      // ID is used to find same enemy in the copied version
+      enemies[enemyID].draw();
+      // ID is used to find the correct enemy in the copied version
       this.decidePlayFor(enemyID);
     }
     this.simulating = false;
@@ -19,6 +20,7 @@ class CombatController{
     // Decide the play order
     let playOrder = this.decidePlayOrder();
 
+    let wait = 0;
     for(let slotID in playZone.slots){
       let cardToPlay = playZone.slots[slotID].card;
       if(cardToPlay){
@@ -29,10 +31,12 @@ class CombatController{
 
   // Decides the play for the enemy with enemyID and saves in .toPlay
   decidePlayFor(enemyID){
+    console.log("Deciding play for: " + enemyID);
+    console.log(enemies[enemyID].hand)
     let enemy = enemies[enemyID]
     let possiblePlays = enemy.possiblePlays();
     let bestPlay = [];
-    let bestValue = -999; // Arbitrary largely negative number
+    let bestValue = Number.NEGATIVE_INFINITY; // Arbitrary largely negative number
     for (let play of possiblePlays){
       //console.log("Evaluating: ");
       //console.log(play);
@@ -66,11 +70,12 @@ class CombatController{
     enemy.toPlay = bestPlay; // Save the best play
   }
 
+  // Evaluates a play based on the state before and after. Returns score
   evaluatePlay(before, after){
     let value = 0;
     // Hurting and getting closer to the player
     value += before.player.health - after.player.health;
-    value += before.player.distanceTo(before.enemy) - after.player.distanceTo(after.enemy);
+    value += (before.player.distanceTo(before.enemy) - after.player.distanceTo(after.enemy))*2;
     // Having the player ahead (2 to -2), and being behind player (0.5 to -0.5)
     value += after.enemy.pointingTowards(after.player);
     value -= after.player.pointingTowards(after.enemy) / 4;
@@ -88,6 +93,11 @@ class CombatController{
       }
     }
     return value
+  }
+
+  // Decides order of cards and returns it
+  decidePlayOrder(){
+
   }
 
   // Create copies of field, player and enemies. For simulating

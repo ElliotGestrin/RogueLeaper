@@ -8,6 +8,7 @@ class Creature{
       this.resistances = {};
       this.statusImmune = [];
       this.statuses = {};
+      this.speed = 0;
       this.x = null; //x,y coordinates
       this.y = null;
       this.direction = 0; //Value between 0 and 360, rotation from up clockwise
@@ -170,6 +171,7 @@ class Player extends Creature{
     super(copy);
     if(!copy){
       this.health = 100;
+      this.speed = 10;
       this.setImage("./images/player.png");
       this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
     }
