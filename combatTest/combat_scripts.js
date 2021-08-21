@@ -54,4 +54,5 @@ for(let i = 0; i < initialCardsInHand; i++){
 }
 
 window.enemies = [];
-window.enemies.push(new Enemy("troll"))
+window.enemies.push(new Enemy("troll"));
+window.enemies.push(new Enemy("troll"));

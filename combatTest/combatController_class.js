@@ -20,13 +20,20 @@ class CombatController{
     // Decide the play order
     let playOrder = this.decidePlayOrder();
 
+    // Play all the cards in order, 1 sec between each one
     let wait = 0;
-    for(let slotID in playZone.slots){
-      let cardToPlay = playZone.slots[slotID].card;
-      if(cardToPlay){
-        setTimeout(cardToPlay.play.bind(cardToPlay),wait);
-        if (!this.simulating) wait += 1000;
-    }}
+    for(let cardToPlay of playOrder){
+      setTimeout(cardToPlay.play.bind(cardToPlay), wait);
+      wait += 1000;
+    }
+
+    // Discard current cards in hand and draw new
+    setTimeout(() => {
+      playZone.discardCards();
+      for (let i = 0; i < player.drawPerTurn; i++){
+        hand.addCard(deck.draw());
+      }
+    }, wait);
   }
 
   // Decides the play for the enemy with enemyID and saves in .toPlay
@@ -97,7 +104,23 @@ class CombatController{
 
   // Decides order of cards and returns it
   decidePlayOrder(){
-
+    let initiatives = {};
+    let playOrder = [];
+    player.toPlay = playZone.toPlay();
+    let creatures = Array.from(enemies);
+    creatures.push(player);
+    creatures.sort((a,b) => b.initiative - a.initiative);
+    let creaturesStillPlaying = true;
+    while(creaturesStillPlaying){
+      creaturesStillPlaying = false; // If no one has cards left to play, round ends
+      for (let creature of creatures){
+        if (creature.toPlay.length != 0){
+          playOrder.push(creature.toPlay.shift())
+          creaturesStillPlaying = true;
+        }
+      }
+    }
+    return playOrder;
   }
 
   // Create copies of field, player and enemies. For simulating

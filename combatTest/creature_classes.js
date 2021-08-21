@@ -171,7 +171,9 @@ class Player extends Creature{
     super(copy);
     if(!copy){
       this.health = 100;
-      this.speed = 10;
+      this.initiative = 10;
+      this.name = "player";
+      this.drawPerTurn = 2;
       this.setImage("./images/player.png");
       this.image.setAttribute('class',this.image.getAttribute('class') + ' player');
     }

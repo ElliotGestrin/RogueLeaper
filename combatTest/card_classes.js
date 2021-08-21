@@ -181,6 +181,22 @@ class PlayZone{
     slot.image.remove();
     delete this.slots[position]
   }
+
+  // Returns the cards to play in the correct order
+  toPlay(){
+    let toPlay = [];
+    for (let slotID in this.slots){
+      if (this.slots[slotID].card) toPlay.push(this.slots[slotID].card);
+    }
+    return toPlay;
+  }
+
+  // Adds all the played cards to the discard
+  discardCards(){
+    for (let slotID in this.slots){
+      discard.add(this.slots[slotID].removeCard(true));
+    }
+  }
 }
 
 // HandSlot contains the cards in hand. Dynamically removed and added by
@@ -207,6 +223,7 @@ class Hand{
   constructor(maxCardsInHand){
     this.image = document.querySelector('.hand');
     this.slots = {};
+    this.length = 0;
     this.limit = maxCardsInHand;
   }
 
@@ -214,6 +231,7 @@ class Hand{
   removeSlot(identifier){
     this.slots[identifier].image.remove();
     delete this.slots[identifier];
+    this.length -= 1;
   }
 
   // Add a new slot. Uses lowest free integer as identifier
@@ -223,6 +241,7 @@ class Hand{
     let slot = new HandSlot(identifier);
     this.slots[slot.identifier] = slot;
     this.image.append(slot.image);
+    this.length += 1;
     return(slot);
   }
 
@@ -255,7 +274,12 @@ class Deck{
 
   // Remove and return the top card
   draw(){
-    return this.cards.shift();
+    if(this.cards.length > 0) return this.cards.shift();
+    else{
+      this.cards = discard.removeAll();
+      this.shuffle();
+      return this.cards.shift();
+    }
   }
 
   // Adds a card to the bottom of the deck
@@ -304,6 +328,13 @@ class Discard{
   // Adds a card to the the discard
   add(card){
     this.cards.push(card)
+  }
+
+  // Removes all cards and returns them as an array
+  removeAll(){
+    let cards = this.cards;
+    this.cards = [];
+    return cards;
   }
 
   // When pressed print the names and id of all card in order into console
